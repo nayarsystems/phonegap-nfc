@@ -747,7 +747,14 @@ public class NfcPlugin extends CordovaPlugin implements NfcAdapter.OnNdefPushCom
 
             PluginResult result = new PluginResult(PluginResult.Status.OK, event);
             result.setKeepCallback(true);
-            channelCallback.sendPluginResult(result);
+
+            for (int i=0; i<20; i++) {
+                if (channelCallback != null) {
+                    channelCallback.sendPluginResult(result);
+                    return;
+                }
+                try { Thread.sleep(100); } catch (InterruptedException e) {};    
+            }
         } catch (JSONException e) {
             Log.e(TAG, "Error sending NFC event through the channel", e);
         }
